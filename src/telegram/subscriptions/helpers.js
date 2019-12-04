@@ -1,5 +1,6 @@
 const fs = require('fs');
 const reduce = require('lodash.reduce');
+const logger = require('../../utils/logger')(__filename);
 
 const FILE = 'src/telegram/subscriptions/subscriptions.json';
 let timer;
@@ -21,12 +22,14 @@ const onSubscriptionUpdateHandler = {
 const helpers = new Proxy(JSON.parse(fs.readFileSync(FILE, 'utf-8')), onSubscriptionUpdateHandler);
 
 const dumpToFile = () => {
+    logger.info(`Saving subscriptions to file ${FILE}`);
     return new Promise((resolve, reject) => {
         fs.writeFile(FILE, JSON.stringify(helpers), (writeError) => {
             if (writeError) {
-                console.error('error while saving helpers', writeError);
+                logger.error('Error while saving subscriptions', writeError);
                 reject(writeError);
             } else {
+                logger.info(`Successfully saved subscriptions to file ${FILE}`);
                 resolve(helpers);
             }
         });

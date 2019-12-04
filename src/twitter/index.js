@@ -1,5 +1,6 @@
 const Twitter = require('twitter');
 const Subscriptions = require('./subscriptions');
+const logger = require('../utils/logger')(__filename);
 
 const client = new Twitter({
     consumer_key: process.env.tw_consumer_key,
@@ -9,5 +10,7 @@ const client = new Twitter({
 });
 
 const subscriptions = Subscriptions(client);
+
+logger.info('Initialized twitter module');
 
 module.exports = { subscriptions };
