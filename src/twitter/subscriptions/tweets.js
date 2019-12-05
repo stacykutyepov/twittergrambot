@@ -27,6 +27,10 @@ function Stream(twitterClient) {
             emitter.error(error);
         });
 
+        streamOfTweets.on('end', (response) => {
+            logger.error('Twitter stream closed', response);
+        });
+
         return () => {
             logger.info('Destroyed subscription to stream of tweets');
 
