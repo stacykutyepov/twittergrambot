@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "kefir": "^3.8.6",
+    "lodash.get": "^4.4.2",
     "lodash.reduce": "^4.6.0",
     "node-telegram-bot-api": "^0.30.0",
     "twitter": "^1.7.1",
