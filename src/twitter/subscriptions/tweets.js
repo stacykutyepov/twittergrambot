@@ -2,8 +2,11 @@ const Kefir = require('kefir');
 const logger = require('../../utils/logger')(__filename);
 const {
   getUserId,
-  getFullTweet,
+  getUserName,
   getTweet,
+  getRetweetedTweet,
+  getQuotedTweet,
+  getQuotedUser,
 } = require('../internal/selectors');
 
 const FOLLOWING = 25073877; //@realdonaldtrump
@@ -32,13 +35,18 @@ class StreamOfTweets {
 
   onNewTweet(event) {
     const userId = getUserId(event);
-    const userName = getUserId(event);
+    const userName = getUserName(event);
     const tweet = getTweet(event);
-    if (userId === FOLLOWING && tweet) {
-      // logger.info(JSON.stringify(event, null, 2));
-      logger.info(`New tweet ${tweet} from "${userName}" "${userId}"`);
+    const isRetweet = getRetweetedTweet(event) !== null;
+    if (userId === FOLLOWING && tweet && !isRetweet) {
+      let processedTweet = tweet;
+      const quotedTweet = getQuotedTweet(event);
+      if(quotedTweet) {
+        processedTweet = `<i><b>${userName}</b> tweets:</i>\n\n${processedTweet}\n\n<i>in reply to the tweet of <b>${getQuotedUser(event)}</b></i>\n\n${quotedTweet}`;
+      }
 
-      this.emitter.emit(getFullTweet(event) || tweet);
+      logger.info(`New tweet ${processedTweet} from "${userName}" "${userId}"`);
+      this.emitter.emit(processedTweet);
     }
   }
 

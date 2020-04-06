@@ -8,18 +8,36 @@ const getUserName = (obj) => {
   return get(obj, 'user.name') || null;
 };
 
-const getFullTweet = (obj) => {
-  return get(obj, 'extended_tweet.full_text') || null;
+const getTweet = (obj) => {
+  return get(obj, 'extended_tweet.full_text') || get(obj, 'text') || null;
 };
 
-const getTweet = (obj) => {
-  return get(obj, 'text') || null;
+const getRetweetedTweet = (obj) => {
+  return get(obj, 'retweeted_status') || null;
+};
+
+const getQuotedTweet = (obj) => {
+  const quoted = get(obj, 'quoted_status') || null;
+  if (quoted !== null) {
+    return getTweet(quoted)
+  }
+  return quoted;
+};
+
+const getQuotedUser = (obj) => {
+  const quoted = get(obj, 'quoted_status') || null;
+  if (quoted !== null) {
+    return getUserName(quoted)
+  }
+  return quoted;
 };
 
 module.exports = {
   getUserId,
   getUserName,
-  getFullTweet,
   getTweet,
+  getRetweetedTweet,
+  getQuotedTweet,
+  getQuotedUser,
 };
 
