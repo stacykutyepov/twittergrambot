@@ -32,6 +32,10 @@ const getQuotedUser = (obj) => {
   return quoted;
 };
 
+const getReplyToStatusId = (obj) => {
+  return get(obj, 'in_reply_to_status_id') || null;
+};
+
 module.exports = {
   getUserId,
   getUserName,
@@ -39,5 +43,6 @@ module.exports = {
   getRetweetedTweet,
   getQuotedTweet,
   getQuotedUser,
+  getReplyToStatusId,
 };
 

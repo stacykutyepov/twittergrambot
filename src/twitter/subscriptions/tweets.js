@@ -7,6 +7,7 @@ const {
   getRetweetedTweet,
   getQuotedTweet,
   getQuotedUser,
+  getReplyToStatusId,
 } = require('../internal/selectors');
 
 const FOLLOWING = 25073877; //@realdonaldtrump
@@ -38,7 +39,8 @@ class StreamOfTweets {
     const userName = getUserName(event);
     const tweet = getTweet(event);
     const isRetweet = getRetweetedTweet(event) !== null;
-    if (userId === FOLLOWING && tweet && !isRetweet) {
+    const isReply = getReplyToStatusId(event) !== null;
+    if (userId === FOLLOWING && tweet && !isRetweet && !isReply) {
       let processedTweet = tweet;
       const quotedTweet = getQuotedTweet(event);
       if(quotedTweet) {
